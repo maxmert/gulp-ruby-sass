@@ -49,29 +49,34 @@ Use [gulp-watch](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatc
 ##### sourcemap
 
 Type: `String`  
-Default: `auto`
+Default: `inline`  
 
-Values:
+**Note: Only `inline` and `none` are currently supported. Requires [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).**
 
-- `auto` - relative paths where possible, file URIs elsewhere
-- `file` - always absolute file URIs
-- `inline` - include the source text in the sourcemap
-- `none`- no sourcemaps
+Requires Sass `>= 3.4` and gulp-sourcemaps.
 
-Enable Source Map. **Requires Sass >= 3.4.0 and the [`sourcemapPath` option](#sourcemappath).**
+- `inline` creates sourcemaps with inline source.
+- `none` skips sourcemap creation.
 
+###### Recipe
 
-##### sourcemapPath
+```js
+var gulp = require('gulp');
+var sass = require('gulp-ruby-sass');
+var sourcemaps = require('gulp-sourcemaps');
 
-Type: `string`  
-
-A relative path from the output CSS directory to the Sass source directory as seen by your web server.
-
-Because gulp-ruby-sass can't know your CSS destination directory or your server setup you have to give a little extra information to help the browser find sourcemaps. Examples:
-
-- If source is `site/scss`, destination is `site/css`, and you're serving from `site`: `{ sourcemapPath: '../scss' }`.
-- If source is `app/styles`, destination is `.tmp/styles`, and you're serving both `.tmp` and `app`: `{ sourcemapPath: '.' }`.
-
+gulp.task('sass', function() {
+	return sass('fixture/source', {
+		sourcemap: 'inline'
+	})
+	.on('error', function (err) {
+		console.error('Error', err.message);
+	})
+	// sourcemaps.init() is automatic, no need to include it
+	.pipe(sourcemaps.write('../maps'))
+	.pipe(gulp.dest('fixture/result'));
+});
+```
 
 ##### trace
 
