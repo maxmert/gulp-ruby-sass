@@ -47,8 +47,8 @@ it('compiles Sass', function (done) {
 				noErrorFiles[1].contents.toString(),
 			].sort(),
 			[
-				fs.readFileSync('fixture/results/fixture-a.css', {encoding: 'utf8'}),
-				fs.readFileSync('fixture/results/nested/fixture-b.css', {encoding: 'utf8'})
+				fs.readFileSync('fixture/result/fixture-a.css', {encoding: 'utf8'}),
+				fs.readFileSync('fixture/result/nested/fixture-b.css', {encoding: 'utf8'})
 			].sort()
 		);
 
