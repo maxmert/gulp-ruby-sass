@@ -157,7 +157,7 @@ module.exports = function (source, options) {
 	// spawn error: no sass executable
 	sass.on('error', function (err) {
 		if (matchNoSass.test(err)) {
-			err.msg = msgNoSass;
+			err.message = msgNoSass;
 		}
 		stream.emit('error', newErr(err));
 	});
