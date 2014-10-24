@@ -18,18 +18,19 @@ var escapeRegExp = require('escape-string-regexp');
 var File = require('vinyl');
 var Readable = require('stream').Readable;
 
-function clipPath (clip, sourcePath) {
-	return sourcePath.match(new RegExp(escapeRegExp(clip) + '(.*)$'))[1];
+// Removes clip from the beginning of source
+function clipPath (source, clip) {
+	return source.match(new RegExp(escapeRegExp(clip) + '/?(.*)$'))[1];
 }
 
 // Removes OS temp dir and line breaks for more Sass-like logging
-function formatMsg(msg, tempDir) {
+function formatMsg (msg, tempDir) {
 	msg = msg.replace(new RegExp((tempDir) + '/?', 'g'), '');
 	msg = msg.trim();
 	return msg;
 }
 
-function newErr(err, opts) {
+function newErr (err, opts) {
 	return new gutil.PluginError('gulp-ruby-sass', err, opts);
 }
 
@@ -161,16 +162,28 @@ module.exports = function (source, options) {
 					var vinylFile = new File({
 						cwd: cwd,
 						base: base,
-						path: path.join(base, clipPath(dest, file)),
+						path: path.join(base, clipPath(file, dest)),
 					});
+					var sourcemap;
 
-					// process source and map files for gulp-sourcemaps
-					// TODO: Only works with `sourcemap=inline` right now. If we rewrite
-					// the sourcemap sources locations we can make it work with `file`
-					// too.
+					// process files for gulp-sourcemaps
 					if (path.extname(file) === '.css' && fs.existsSync(file + '.map')) {
+						sourcemap = JSON.parse(fs.readFileSync(file + '.map', 'utf8'));
+
+						if (options.sourcemap === 'file') {
+							// create relative paths between sources. so. ugly.
+							sourcemap.sources = sourcemap.sources.map(function (sourcemapSource) {
+								// get steps up from sourcemap file (same as css file) to cwd
+								var stepsUp = path.relative(path.dirname(vinylFile.path), vinylFile.base);
+								// get file's location relative to cwd
+								var relToCwd = clipPath(sourcemapSource, 'file://' + base);
+								return path.join(stepsUp, relToCwd);
+							});
+						}
+
+						// remove Sass sourcemap comment; gulp-sourcemaps will add it back in
 						vinylFile.contents = new Buffer( convert.removeMapFileComments(data.toString()) );
-						vinylFile.sourceMap = JSON.parse(fs.readFileSync(file + '.map', 'utf8'));
+						vinylFile.sourceMap = sourcemap;
 					}
 					else {
 						vinylFile.contents = data;

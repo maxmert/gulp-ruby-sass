@@ -7,7 +7,7 @@ var sass = require('./');
 
 gulp.task('sass', function() {
 	return sass('fixture/source', {
-		sourcemap: 'inline'
+		sourcemap: 'file'
 	})
 	.on('error', function (err) {
 	  console.error('Error', err.message);

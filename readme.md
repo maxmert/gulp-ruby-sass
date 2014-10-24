@@ -51,12 +51,15 @@ Use [gulp-watch](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatc
 Type: `String`  
 Default: `inline`  
 
-**Note: Only `inline` and `none` are currently supported. Requires [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).**
+**Note: Only `inline`, `file` and `none` are supported. Requires [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).**
 
 Requires Sass `>= 3.4` and gulp-sourcemaps.
 
 - `inline` creates sourcemaps with inline source.
+- `file` references sources on disk.
 - `none` skips sourcemap creation.
+
+<!-- https://developer.chrome.com/devtools/docs/css-preprocessors -->
 
 ###### Recipe
 
