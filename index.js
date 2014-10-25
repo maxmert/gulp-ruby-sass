@@ -50,8 +50,8 @@ module.exports = function (source, options) {
 	options.update = true;
 	options.container = options.container || 'gulp-ruby-sass';
 
-	// sourcemap can only be `inline` or `none` for now
-	options.sourcemap = options.sourcemap || 'inline';
+	// sourcemap can only be `inline`, `file`, or `none` for now
+	options.sourcemap = options.sourcemap || 'file';
 
 	// all options passed to sass must use unix style slashes
 	dest = slash(path.join(osTempDir, options.container));

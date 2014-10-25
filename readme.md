@@ -49,7 +49,7 @@ Use [gulp-watch](https://github.com/gulpjs/gulp/blob/master/docs/API.md#gulpwatc
 ##### sourcemap
 
 Type: `String`  
-Default: `inline`  
+Default: `file`  
 
 **Note: Only `inline`, `file` and `none` are supported. Requires [gulp-sourcemaps](https://github.com/floridoo/gulp-sourcemaps).**
 
